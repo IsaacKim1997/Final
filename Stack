@@ -1,0 +1,37 @@
+import java.util.ArrayList;
+
+public class Stack<T>{
+
+	private T[] stack;
+	private int topIndex;
+	private int defaultCapacity=100;
+	
+	public Stack() {
+		stack= <T[]>new Object[defaultCapacity];
+		topIndex=-1;
+	}
+	
+	public T pop() {
+		T temp=stack[topIndex];
+		stack[topIndex]=null;
+		topIndex--;
+		return temp;
+		
+	}
+
+	public void push(T newEntry) {
+		stack[topIndex+1]=newEntry;
+		topIndex++;
+	}
+
+	public T peek() {
+		// TODO Auto-generated method stub
+		return stack[topIndex];
+	}
+
+	public int getSize() {
+		// TODO Auto-generated method stub
+		return topIndex+1;
+	}
+
+}
