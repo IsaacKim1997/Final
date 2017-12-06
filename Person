@@ -1,0 +1,89 @@
+/*************************************************************************
+  Winter 2017 CS 240 Programming Exam : Person
+
+ Author: Isaac Kim      
+
+ Dependencies: Stack, Queue, Dictionary
+
+ Description:  Models a person, a list of messages that they can
+               read, and a list of their friends, so that when you
+               post a message, all your friends can read it too.
+
+**************************************************************************/
+
+public class Person { 
+	
+	public String name;
+	public Stack<Person> friendsList;
+	public Stack<String> messageList;
+
+    // Create a new Person with this name.
+    public Person(String name) {
+        this.name=name;
+        this.friendsList=new Stack<Person>();
+        this.messageList=new Stack<String>();
+    }
+
+    // Make these two people become friends with each other.
+    // Throw an exception if you try to meet yourself.
+    // We are allowed to assume we didn't meet this person yet.
+    public void meet(Person otherPerson) {
+        if (this==otherPerson) {
+        	throw new RuntimeException("I see you're very lonely");
+        }
+        else {
+        friendsList.push(otherPerson);
+        otherPerson.friendsList.push(this);
+        }
+        
+        	
+    }
+
+    // Are these two people friends?
+    // Throw an exception if you ask about knowing yourself.
+    public boolean knows(Person otherPerson) {
+        if (this==otherPerson) {
+            throw new RuntimeException("Sometimes, I don't even know if I know myself too");
+        }
+        else {
+        	boolean doesKnow=false;
+        	Stack<Person> temp=new Stack<Person>();
+        	for(int i=friendsList.getSize();i>0;i--) {
+        		if(friendsList.peek()==otherPerson)
+        		doesKnow=true;
+        		temp.push(friendsList.pop());
+        	}
+        	for(int j=temp.getSize();j>0;j--) {
+        		friendsList.push(temp.pop());
+        	}
+        	return doesKnow;
+        }
+    }
+
+    // Post a message to my list and the lists of all my friends
+    public void post(String message) {
+        messageList.push(message);
+       	Stack<Person> temp=new Stack<Person>();
+    	for(int i=friendsList.getSize();i>0;i--) {
+    		friendsList.peek().messageList.push(message);
+    		temp.push(friendsList.pop());
+    	}
+    	for(int j=temp.getSize();j>0;j--) {
+    		friendsList.push(temp.pop());
+    	}
+    }
+
+    // Print a header, then all messages this Person can read, newest first
+    public void listMessages() {
+
+        System.out.println("==The wall of " + name + "==");
+    	Stack<String> temp=new Stack<String>();
+        for(int i=messageList.getSize();i>0;i--) {
+    		System.out.println(messageList.peek());
+    		temp.push(messageList.pop());
+    	}
+    	for(int j=temp.getSize();j>0;j--) {
+    		messageList.push(temp.pop());
+    	}
+}
+    
